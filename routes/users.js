@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+/* eslint-disable new-cap */
+const express = require('express');
+const router = express.Router();
+const userService = require('../services/user');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.put('/register', function(req, res, next) {
+  userService.register(req.body, function(code, msg) {
+    return res.status(code).send(msg);
+  });
 });
 
 module.exports = router;
