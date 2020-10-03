@@ -3,7 +3,6 @@ const userModel = require('../models/user');
 const hash = require('../helpers/encrypt');
 
 async function register(user, callback) {
-  console.log(user);
   user.password = hash.hashMessage(user.password);
 
   try {
@@ -17,4 +16,5 @@ async function register(user, callback) {
 
 module.exports = {
   register: register,
+  login: login,
 };

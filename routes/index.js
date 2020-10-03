@@ -7,8 +7,6 @@ const router = express.Router();
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  teste();
-
   res.status(200).send('ola');
 });
 

@@ -1,10 +1,10 @@
 /* eslint-disable new-cap */
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/user');
+const authService = require('../services/auth');
 
-router.post('/register', function(req, res, next) {
-  userService.register(req.body, function(code, msg) {
+router.post('/', function(req, res, next) {
+  authService.login(req.body, function(code, msg) {
     return res.status(code).send(msg);
   });
 });
