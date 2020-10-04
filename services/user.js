@@ -16,5 +16,4 @@ async function register(user, callback) {
 
 module.exports = {
   register: register,
-  login: login,
 };
