@@ -3,6 +3,10 @@ const userModel = require('../models/user');
 const hash = require('../helpers/encrypt');
 
 async function register(user, callback) {
+  if (user.email.length === 0 || user.password.length === 0) {
+    return callback(400, {msg: 'Wrong values', code: 'WRVALS'});
+  }
+
   user.password = hash.hashMessage(user.password);
 
   try {
