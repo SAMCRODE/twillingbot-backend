@@ -14,6 +14,8 @@ async function login(user, callback) {
     }
 
     user.id = res.res.id;
+    user.password = '';
+
     return callback(200, {
       msg: 'Success', user: user,
       jwt: token.tokenize(user)});
