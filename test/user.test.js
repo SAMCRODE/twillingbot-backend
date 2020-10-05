@@ -37,3 +37,13 @@ test('createUserFromService', (done) => {
     done();
   });
 });
+
+test('notCreateUserWithSameEmail', (done) => {
+  const userTest = new User(0, 'app@app.com', '123456');
+
+  userService.register(userTest, function(code, msg) {
+    expect(msg.code).toBe('EMAILREP');
+
+    done();
+  });
+});
