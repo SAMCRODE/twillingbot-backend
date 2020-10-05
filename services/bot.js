@@ -2,6 +2,32 @@ const Bot = require('../models/bot');
 const encrypt = require('../helpers/encrypt');
 const Twit = require('twit');
 
+// eslint-disable-next-line require-jsdoc
+async function getUserIdFromHandle(bot, handle) {
+  const T = new Twit({
+    consumer_key: bot.apiKey,
+    consumer_secret: bot.apiSecretKey,
+    access_token: bot.accessToken,
+    access_token_secret: bot.accessSecretToken,
+  });
+
+  bot.apiKey = encrypt.cryptMessage(bot.apiKey);
+  bot.apiSecretKey = encrypt.cryptMessage(bot.apiSecretKey);
+  bot.accessToken = encrypt.cryptMessage(bot.accessToken);
+  bot.accessSecretToken = encrypt.cryptMessage(bot.accessSecretToken);
+
+  return new Promise(async function(resolve, reject) {
+    T.get('users/show', {screen_name: handle},
+        async function(err, data, response) {
+          if (err) {
+            return reject(new Error(err.message));
+          }
+
+          return resolve(data.id_str);
+        });
+  });
+}
+
 /**
  * Register a bot.
  * @param {Bot} bot object to be saved.
@@ -61,7 +87,125 @@ async function getBotList(callback) {
   }
 }
 
+/**
+ * make a tweet
+ * @param {Bot} bot to make the tweet from.
+ * @param {string} text text to be tweeted
+ * @return {Promise} Promise returns error if some error ocurred
+ */
+async function tweet(bot, text) {
+  const T = new Twit({
+    consumer_key: bot.apiKey,
+    consumer_secret: bot.apiSecretKey,
+    access_token: bot.accessToken,
+    access_token_secret: bot.accessSecretToken,
+  });
+
+  return new Promise(function(resolve, reject) {
+    T.post('statuses/update',
+        {status: text}, function(err, data, response) {
+          if (err) {
+            return reject(new Error(err.message));
+          }
+
+          return resolve(bot.id);
+        });
+  });
+}
+
+/**
+ * follow someone
+ * @param {Bot} bot to make the follow from.
+ * @param {string} handle the twitter account with handle to be followed
+ * @return {Promise} Promise returns error if some error ocurred
+ */
+async function follow(bot, handle) {
+  const T = new Twit({
+    consumer_key: bot.apiKey,
+    consumer_secret: bot.apiSecretKey,
+    access_token: bot.accessToken,
+    access_token_secret: bot.accessSecretToken,
+  });
+
+  const id = await getUserIdFromHandle(bot, handle);
+
+  return new Promise(function(resolve, reject) {
+    T.post('friendships/create',
+        {user_id: id}, function(err, data, response) {
+          if (err) {
+            return reject(new Error(err.message));
+          }
+          return resolve(bot.id);
+        });
+  });
+}
+
+// eslint-disable-next-line require-jsdoc
+async function executeTweetOrder(tweetOrder, callback) {
+  const text = tweetOrder.tweet;
+  let bots = tweetOrder.botIds;
+
+  bots = await Promise.all(bots.map(async (bot) => {
+    bot = await Bot.selectWhereId(bot);
+    bot = bot.res;
+
+    bot.apiKey = encrypt.decryptMessage(bot.apikey);
+    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
+    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
+    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    // console.log(bot);
+    return bot;
+  }));
+
+  await Promise.allSettled(bots.map(async (bot) => {
+    return new Promise(async function(resolve, reject) {
+      try {
+        const ret = await tweet(bot, text);
+        return resolve(ret);
+      } catch (e) {
+        return reject(new Error(e));
+      }
+    });
+  })).then((values) => {
+    return callback(200, values);
+  });
+}
+
+// eslint-disable-next-line require-jsdoc
+async function executeFollowOrder(tweetOrder, callback) {
+  const handle = tweetOrder.handle;
+  let bots = tweetOrder.botIds;
+
+  bots = await Promise.all(bots.map(async (bot) => {
+    bot = await Bot.selectWhereId(bot);
+    bot = bot.res;
+
+    bot.apiKey = encrypt.decryptMessage(bot.apikey);
+    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
+    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
+    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    // console.log(bot);
+    return bot;
+  }));
+
+  await Promise.allSettled(bots.map(async (bot) => {
+    return new Promise(async function(resolve, reject) {
+      try {
+        const ret = await follow(bot, handle);
+        return resolve(ret);
+      } catch (e) {
+        return reject(new Error(e));
+      }
+    });
+  })).then((values) => {
+    return callback(200, values);
+  });
+}
+
 module.exports = {
   register: register,
   getBotList: getBotList,
+  tweet: tweet,
+  executeTweetOrder: executeTweetOrder,
+  executeFollowOrder: executeFollowOrder,
 };

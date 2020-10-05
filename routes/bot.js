@@ -9,4 +9,16 @@ router.get('/list', function(req, res, next) {
   });
 });
 
+router.post('/tweet', function(req, res, next) {
+  botService.executeTweetOrder(req.body, function(code, msg) {
+    return res.status(code).send(msg);
+  });
+});
+
+router.post('/follow', function(req, res, next) {
+  botService.executeFollowOrder(req.body, function(code, msg) {
+    return res.status(code).send(msg);
+  });
+});
+
 module.exports = router;

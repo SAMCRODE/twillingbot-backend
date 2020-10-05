@@ -1,4 +1,6 @@
 const Bot = require('../models/bot');
+const FollowOrder = require('../models/FollowOrder');
+const TweetOrder = require('../models/TweetOrder');
 const botService = require('../services/bot');
 
 test('saveBot', async () => {
@@ -18,6 +20,22 @@ test('selectBotList', (done) => {
   botService.getBotList(function(code, msg) {
     expect(code).toBe(200);
 
+    done();
+  });
+});
+
+// test('executeTweetOrder', (done) => {
+//   botService.executeTweetOrder(new TweetOrder([8],
+//       'ola @just_a_foolish'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
+
+test('executeFollowOrder', (done) => {
+  botService.executeFollowOrder(new FollowOrder([8],
+      'MordekaiWoodi'), function(code, msg) {
+    expect(code).toBe(200);
     done();
   });
 });
