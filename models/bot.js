@@ -98,6 +98,7 @@ class Bot {
     return new Promise(
         function(resolve, reject) {
           if (cache.has(`botselect`)) {
+            console.log(`cache`);
             return resolve(cache.get(`botselect`));
           }
 
