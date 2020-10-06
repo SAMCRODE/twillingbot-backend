@@ -2,6 +2,8 @@
 /* eslint-disable require-jsdoc */
 
 const pool = require('../helpers/database');
+const NodeCache = require('node-cache');
+const cache = new NodeCache();
 
 class Bot {
   constructor(id, name, handle, profileImage, followersCount,
@@ -69,6 +71,10 @@ class Bot {
   static selectWhereId(id) {
     return new Promise(
         function(resolve, reject) {
+          if (cache.has(`bot${id}`)) {
+            return resolve(cache.get(`bot${id}`));
+          }
+
           pool.connect((err, client, release) => {
             if (err) {
               return reject(new Error({err: err}));
@@ -81,6 +87,7 @@ class Bot {
                     return reject(new Error({err: err}));
                   }
 
+                  cache.set(`bot${id}`, {res: res.rows[0]});
                   return resolve({res: res.rows[0]});
                 });
           });
@@ -90,6 +97,10 @@ class Bot {
   static selectBotList() {
     return new Promise(
         function(resolve, reject) {
+          if (cache.has(`botselect`)) {
+            return resolve(cache.get(`botselect`));
+          }
+
           pool.connect((err, client, release) => {
             if (err) {
               return reject(new Error({err: err}));
@@ -102,6 +113,7 @@ class Bot {
                     return reject(new Error({err: err}));
                   }
 
+                  cache.set(`botselect`, {res: res.rows});
                   return resolve({res: res.rows});
                 });
           });
