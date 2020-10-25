@@ -3,10 +3,11 @@
 const pool = require('../helpers/database');
 
 class User {
-  constructor(id, email, password) {
+  constructor(id, email, password, codePassReset) {
     this.id = id;
     this.email = email;
     this.password = password;
+    this.codepassreset = codePassReset;
   }
 
   static save(user) {
@@ -48,6 +49,52 @@ class User {
 
                   return resolve({res: res.rows[0]});
                 });
+          });
+        });
+  }
+
+  static updateCodePassReset(code, id) {
+    return new Promise(
+        function(resolve, reject) {
+          pool.connect((err, client, release) => {
+            if (err) {
+              return reject(new Error({err: err}));
+            }
+
+            client.query('UPDATE users' +
+          ' SET codePassReset = $1 where id = $2 ',
+            [code, id], (err, res) => {
+              release();
+              if (err) {
+                console.log(err);
+                return reject(new Error({err: err}));
+              }
+
+              return resolve();
+            });
+          });
+        });
+  }
+
+  static updatePassword(pass, id) {
+    return new Promise(
+        function(resolve, reject) {
+          pool.connect((err, client, release) => {
+            if (err) {
+              return reject(new Error({err: err}));
+            }
+
+            client.query('UPDATE users' +
+          ' SET password = $1 where id = $2 ',
+            [pass, id], (err, res) => {
+              release();
+              if (err) {
+                console.log(err);
+                return reject(new Error({err: err}));
+              }
+
+              return resolve();
+            });
           });
         });
   }

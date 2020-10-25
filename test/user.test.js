@@ -47,3 +47,7 @@ test('notCreateUserWithSameEmail', (done) => {
     done();
   });
 });
+
+test('updateCodePassReset', async () => {
+  await User.updateCodePassReset('123456', 1);
+});

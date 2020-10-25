@@ -11,11 +11,6 @@ async function getUserIdFromHandle(bot, handle) {
     access_token_secret: bot.accessSecretToken,
   });
 
-  bot.apiKey = encrypt.cryptMessage(bot.apiKey);
-  bot.apiSecretKey = encrypt.cryptMessage(bot.apiSecretKey);
-  bot.accessToken = encrypt.cryptMessage(bot.accessToken);
-  bot.accessSecretToken = encrypt.cryptMessage(bot.accessSecretToken);
-
   return new Promise(async function(resolve, reject) {
     T.get('users/show', {screen_name: handle},
         async function(err, data, response) {
@@ -105,6 +100,7 @@ async function tweet(bot, text) {
     T.post('statuses/update',
         {status: text}, function(err, data, response) {
           if (err) {
+            // console.log(err.message);
             return reject(new Error(err.message));
           }
 
