@@ -33,8 +33,24 @@ test('selectBotList', (done) => {
 // });
 
 test('executeFollowOrder', (done) => {
-  botService.executeFollowOrder(new FollowOrder([8],
+  botService.executeFollowOrder(new FollowOrder([45],
       'MordekaiWoodi'), function(code, msg) {
+    expect(code).toBe(200);
+    done();
+  });
+});
+
+test('executeLikeOrder', (done) => {
+  botService.executeLikeOrder(new FollowOrder([44],
+      '@just_a_foolish'), function(code, msg) {
+    expect(code).toBe(200);
+    done();
+  });
+});
+
+test('executeRetweetOrder', (done) => {
+  botService.executeRetweetOrder(new FollowOrder([44],
+      'just_a_foolish'), function(code, msg) {
     expect(code).toBe(200);
     done();
   });
