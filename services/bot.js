@@ -319,6 +319,7 @@ async function executeRetweetOrder(retweetOrder, callback) {
                 const ret = await retweet(bot, tweetData.id_str);
                 return resolve(ret);
               } catch (e) {
+                console.log(e);
                 return reject(new Error(e));
               }
             });
