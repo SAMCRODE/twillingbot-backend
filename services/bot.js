@@ -45,6 +45,7 @@ async function register(bot) {
     T.get('users/show', {screen_name: bot.handle},
         async function(err, data, response) {
           if (err) {
+            console.log(err);
             return new Error(err.message);
           }
 

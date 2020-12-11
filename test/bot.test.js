@@ -19,6 +19,7 @@ test('saveBot', async () => {
 test('selectBotList', (done) => {
   botService.getBotList(function(code, msg) {
     expect(code).toBe(200);
+    console.log(msg);
 
     done();
   });
@@ -32,26 +33,26 @@ test('selectBotList', (done) => {
 //   });
 // });
 
-test('executeFollowOrder', (done) => {
-  botService.executeFollowOrder(new FollowOrder([45],
-      'MordekaiWoodi'), function(code, msg) {
-    expect(code).toBe(200);
-    done();
-  });
-});
+// test('executeFollowOrder', (done) => {
+//   botService.executeFollowOrder(new FollowOrder([153, 154, 155, 156],
+//       'just_a_foolish'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
 
-test('executeLikeOrder', (done) => {
-  botService.executeLikeOrder(new FollowOrder([44],
-      '@just_a_foolish'), function(code, msg) {
-    expect(code).toBe(200);
-    done();
-  });
-});
+// test('executeLikeOrder', (done) => {
+//   botService.executeLikeOrder(new FollowOrder([153, 154, 155, 156],
+//       '@just_a_foolish'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
 
-test('executeRetweetOrder', (done) => {
-  botService.executeRetweetOrder(new FollowOrder([44],
-      'just_a_foolish'), function(code, msg) {
-    expect(code).toBe(200);
-    done();
-  });
-});
+// test('executeRetweetOrder', (done) => {
+//   botService.executeRetweetOrder(new FollowOrder([153, 154, 155, 156],
+//       'just_a_foolish'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
