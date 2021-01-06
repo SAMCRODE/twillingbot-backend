@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/PS-ES-2020-1-TwitterBotDashboard/backend.svg?branch=master)](https://travis-ci.com/PS-ES-2020-1-TwitterBotDashboard/backend)
+
 # Twitter Dash Backend :whale2:
 This is the backend for twitter dash app, it was builded with nodejs, and control bots on twitter using the [twitter API](https://developer.twitter.com/en/docs "twitter api") available the folowing functionalities:
 
