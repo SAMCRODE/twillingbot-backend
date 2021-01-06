@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest --setupFiles dotenv/config"
+    "test": "jest --setupFiles dotenv/config --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
