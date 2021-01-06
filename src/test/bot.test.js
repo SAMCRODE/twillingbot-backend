@@ -1,7 +1,7 @@
 const Bot = require('../models/bot');
 const botService = require('../services/bot');
 
-test('saveBot', async () => {
+test('saveBot', async (done) => {
   const botTest = new Bot(0, 'bot', '@bot', 'www.image.com', 123, 'asdfa',
       'aasdfasd', 'asdfasdf', 'asdfasdf');
 
@@ -12,12 +12,12 @@ test('saveBot', async () => {
   } catch (e) {
     expect(e).toBe(null);
   }
+  done();
 });
 
 test('selectBotList', (done) => {
   botService.getBotList(function(code, msg) {
     expect(code).toBe(200);
-    console.log(msg);
 
     done();
   });
