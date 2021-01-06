@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-require('dotenv').config();
 const csv = require('csv-parser');
 const fs = require('fs');
 const Bot = require('../models/bot');

@@ -1,6 +1,3 @@
-/* eslint-disable max-len */
-require('dotenv').config();
-
 const config = {};
 
 config.privateKey = process.env.TOKENPRIVATEKEY;
