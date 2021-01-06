@@ -40,6 +40,7 @@ class Bot {
                 console.log(err);
                 return reject(new Error({err: err}));
               }
+              cache.del(`botselect`);
 
               return resolve({res: res.rows[0]});
             });

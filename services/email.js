@@ -14,11 +14,12 @@ async function sendResetPassEmail(code, email) {
   });
 
   await transporter.sendMail({
-    from: '"TwFoLi 👻" <twfoli@twfoli.com>',
+    from: '"TwillingInc 👻" <twilling@contact.com>',
     to: email,
     subject: 'Seu código para alterar a senha',
     text: `Seu código para alterar o password é ${code}`,
-    html: `Digite o código ${code} para poder alterar a sua senha`,
+    html: `Digite o código ${code} 
+    para poder alterar a sua senha`,
   });
 
 //   console.log(info);
