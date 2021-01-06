@@ -1,6 +1,4 @@
 const Bot = require('../models/bot');
-const FollowOrder = require('../models/FollowOrder');
-const TweetOrder = require('../models/TweetOrder');
 const botService = require('../services/bot');
 
 test('saveBot', async () => {

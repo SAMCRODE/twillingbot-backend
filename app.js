@@ -1,15 +1,17 @@
 /* eslint-disable require-jsdoc */
+require('dotenv').config();
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const authenticate = require('./middlewares/auth').authenticate;
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const authRouter = require('./routes/auth');
-const botRouter = require('./routes/bot');
+const authenticate = require('./src/middlewares/auth').authenticate;
+const indexRouter = require('./src/routes/index');
+const usersRouter = require('./src/routes/users');
+const authRouter = require('./src/routes/auth');
+const botRouter = require('./src/routes/bot');
 
 const app = express();
 
