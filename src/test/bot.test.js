@@ -1,5 +1,6 @@
 const Bot = require('../models/bot');
 const botService = require('../services/bot');
+const FollowOrder = require('../models/FollowOrder');
 
 test('saveBot', async (done) => {
   const botTest = new Bot(0, 'bot', '@bot', 'www.image.com', 123, 'asdfa',
@@ -31,26 +32,32 @@ test('selectBotList', (done) => {
 //   });
 // });
 
-// test('executeFollowOrder', (done) => {
-//   botService.executeFollowOrder(new FollowOrder([153, 154, 155, 156],
-//       'just_a_foolish'), function(code, msg) {
+test('executeFollowOrder', async (done) => {
+  const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
+
+  botService.executeFollowOrder(new FollowOrder(ids,
+      'neymarjr'), function(code, msg) {
+    expect(code).toBe(200);
+    done();
+  });
+});
+
+// test('executeLikeOrder', async (done) => {
+//   const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
+
+//   botService.executeLikeOrder(new FollowOrder(ids,
+//       '@neymarjr'), function(code, msg) {
 //     expect(code).toBe(200);
 //     done();
 //   });
 // });
 
-// test('executeLikeOrder', (done) => {
-//   botService.executeLikeOrder(new FollowOrder([153, 154, 155, 156],
-//       '@just_a_foolish'), function(code, msg) {
-//     expect(code).toBe(200);
-//     done();
-//   });
-// });
+test('executeRetweetOrder', async (done) => {
+  const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
 
-// test('executeRetweetOrder', (done) => {
-//   botService.executeRetweetOrder(new FollowOrder([153, 154, 155, 156],
-//       'just_a_foolish'), function(code, msg) {
-//     expect(code).toBe(200);
-//     done();
-//   });
-// });
+  botService.executeRetweetOrder(new FollowOrder(ids,
+      'neymarjr'), function(code, msg) {
+    expect(code).toBe(200);
+    done();
+  });
+});
