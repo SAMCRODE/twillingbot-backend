@@ -2,14 +2,51 @@ const Bot = require('../models/bot');
 const encrypt = require('../helpers/encrypt');
 const Twit = require('twit');
 
-// eslint-disable-next-line require-jsdoc
-async function getUserIdFromHandle(bot, handle) {
-  const T = new Twit({
+/**
+ * crypt bot tokens
+ * @param {Bot} bot
+ * @return {Bot} crypted
+ */
+function cryptBot(bot) {
+  bot.apiKey = encrypt.cryptMessage(bot.apikey);
+  bot.apiSecretKey = encrypt.cryptMessage(bot.apisecretkey);
+  bot.accessToken = encrypt.cryptMessage(bot.accesstoken);
+  bot.accessSecretToken = encrypt.cryptMessage(bot.accesssecrettoken);
+
+  return bot;
+}
+
+/**
+ * decrypt bot tokens
+ * @param {Bot} bot
+ * @return {Bot} decrypted
+ */
+function decryptBot(bot) {
+  bot.apiKey = encrypt.decryptMessage(bot.apikey);
+  bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
+  bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
+  bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+
+  return bot;
+}
+
+/**
+ * create Twit object
+ * @param {Bot} bot
+ * @return {Twit} obj with credentials from bot
+ */
+function getTwitObj(bot) {
+  return new Twit({
     consumer_key: bot.apiKey,
     consumer_secret: bot.apiSecretKey,
     access_token: bot.accessToken,
     access_token_secret: bot.accessSecretToken,
   });
+}
+
+// eslint-disable-next-line require-jsdoc
+async function getUserIdFromHandle(bot, handle) {
+  const T = getTwitObj(bot);
 
   return new Promise(async function(resolve, reject) {
     T.get('users/show', {screen_name: handle},
@@ -29,17 +66,9 @@ async function getUserIdFromHandle(bot, handle) {
  * @return {Promise} Promise with the id of bot on db or an error
  */
 async function register(bot) {
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
-  bot.apiKey = encrypt.cryptMessage(bot.apiKey);
-  bot.apiSecretKey = encrypt.cryptMessage(bot.apiSecretKey);
-  bot.accessToken = encrypt.cryptMessage(bot.accessToken);
-  bot.accessSecretToken = encrypt.cryptMessage(bot.accessSecretToken);
+  bot = cryptBot(bot);
 
   return new Promise(async function(resolve, reject) {
     T.get('users/show', {screen_name: bot.handle},
@@ -90,12 +119,7 @@ async function getBotList(callback) {
  * @return {Promise} Promise returns error if some error ocurred
  */
 async function tweet(bot, text) {
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   return new Promise(function(resolve, reject) {
     T.post('statuses/update',
@@ -117,12 +141,7 @@ async function tweet(bot, text) {
  * @return {Promise} Promise returns error if some error ocurred
  */
 async function like(bot, tweetId) {
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   return new Promise(function(resolve, reject) {
     T.post('favorites/create',
@@ -144,12 +163,7 @@ async function like(bot, tweetId) {
  * @return {Promise} Promise returns error if some error ocurred
  */
 async function retweet(bot, tweetId) {
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   return new Promise(function(resolve, reject) {
     T.post('statuses/retweet',
@@ -171,12 +185,7 @@ async function retweet(bot, tweetId) {
  * @return {Promise} Promise returns error if some error ocurred
  */
 async function follow(bot, handle) {
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   const id = await getUserIdFromHandle(bot, handle);
 
@@ -200,10 +209,7 @@ async function executeTweetOrder(tweetOrder, callback) {
     bot = await Bot.selectWhereId(bot);
     bot = bot.res;
 
-    bot.apiKey = encrypt.decryptMessage(bot.apikey);
-    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
-    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
-    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    bot = decryptBot(bot);
     // console.log(bot);
     return bot;
   }));
@@ -231,22 +237,14 @@ async function executeLikeOrder(likeOrder, callback) {
     bot = await Bot.selectWhereId(bot);
     bot = bot.res;
 
-    bot.apiKey = encrypt.decryptMessage(bot.apikey);
-    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
-    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
-    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    bot = decryptBot(bot);
     // console.log(bot);
     return bot;
   }));
 
   const bot = bots[0];
 
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   if (handle.startsWith('@')) {
     handle = handle.substr(1);
@@ -283,22 +281,14 @@ async function executeRetweetOrder(retweetOrder, callback) {
     bot = await Bot.selectWhereId(bot);
     bot = bot.res;
 
-    bot.apiKey = encrypt.decryptMessage(bot.apikey);
-    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
-    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
-    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    bot = decryptBot(bot);
     // console.log(bot);
     return bot;
   }));
 
   const bot = bots[0];
 
-  const T = new Twit({
-    consumer_key: bot.apiKey,
-    consumer_secret: bot.apiSecretKey,
-    access_token: bot.accessToken,
-    access_token_secret: bot.accessSecretToken,
-  });
+  const T = getTwitObj(bot);
 
   if (handle.startsWith('@')) {
     handle = handle.substr(1);
@@ -339,12 +329,10 @@ async function executeFollowOrder(tweetOrder, callback) {
 
   bots = await Promise.all(bots.map(async (bot) => {
     bot = await Bot.selectWhereId(bot);
+    // console.log(bot, 'eh o bot');
     bot = bot.res;
 
-    bot.apiKey = encrypt.decryptMessage(bot.apikey);
-    bot.apiSecretKey = encrypt.decryptMessage(bot.apisecretkey);
-    bot.accessToken = encrypt.decryptMessage(bot.accesstoken);
-    bot.accessSecretToken = encrypt.decryptMessage(bot.accesssecrettoken);
+    bot = decryptBot(bot);
     // console.log(bot);
     return bot;
   }));
