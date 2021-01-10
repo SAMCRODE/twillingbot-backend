@@ -32,15 +32,15 @@ test('selectBotList', (done) => {
 //   });
 // });
 
-test('executeFollowOrder', async (done) => {
-  const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
+// test('executeFollowOrder', async (done) => {
+//   const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
 
-  botService.executeFollowOrder(new FollowOrder(ids,
-      'neymarjr'), function(code, msg) {
-    expect(code).toBe(200);
-    done();
-  });
-});
+//   botService.executeFollowOrder(new FollowOrder(ids,
+//       'neymarjr'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
 
 // test('executeLikeOrder', async (done) => {
 //   const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
@@ -52,12 +52,12 @@ test('executeFollowOrder', async (done) => {
 //   });
 // });
 
-test('executeRetweetOrder', async (done) => {
-  const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
+// test('executeRetweetOrder', async (done) => {
+//   const ids = (await Bot.selectBotList()).res.map((obj) => obj.id);
 
-  botService.executeRetweetOrder(new FollowOrder(ids,
-      'neymarjr'), function(code, msg) {
-    expect(code).toBe(200);
-    done();
-  });
-});
+//   botService.executeRetweetOrder(new FollowOrder(ids,
+//       'neymarjr'), function(code, msg) {
+//     expect(code).toBe(200);
+//     done();
+//   });
+// });
