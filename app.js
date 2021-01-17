@@ -12,6 +12,7 @@ const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
 const authRouter = require('./src/routes/auth');
 const botRouter = require('./src/routes/bot');
+const handleRouter = require('./src/routes/handle');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/handle', handleRouter);
 
 app.use(authenticate);
 
