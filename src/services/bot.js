@@ -151,7 +151,7 @@ async function like(bot, tweetId) {
             return reject(new Error(err.message));
           }
 
-          return resolve();
+          return resolve(bot.handle);
         });
   });
 }
@@ -253,19 +253,9 @@ async function executeLikeOrder(likeOrder, callback) {
   T.get('users/lookup',
       {screen_name: `${handle}`, result_type: 'recent',
         count: 3}, async function(err, data, response) {
-        await Promise.allSettled(bots.map(async (bot) => {
-          data.forEach( (userData) => {
-            const tweetData = userData.status;
-
-            return new Promise(async function(resolve, reject) {
-              try {
-                const ret = await like(bot, tweetData.id_str);
-                return resolve(ret);
-              } catch (e) {
-                return reject(new Error(e));
-              }
-            });
-          });
+        await Promise.allSettled(bots.map((bot) => {
+          const tweetData = data[0].status;
+          return like(bot, tweetData.id_str);
         })).then((values) => {
           return callback(200, values);
         });
@@ -299,22 +289,9 @@ async function executeRetweetOrder(retweetOrder, callback) {
         count: 3}, async function(err, data, response) {
         // console.log(data);
 
-        await Promise.allSettled(bots.map(async (bot) => {
-          // console.log(data);
-
-          data.forEach( (userData) => {
-            const tweetData = userData.status;
-
-            return new Promise(async function(resolve, reject) {
-              try {
-                const ret = await retweet(bot, tweetData.id_str);
-                return resolve(ret);
-              } catch (e) {
-                console.log(e);
-                return reject(new Error(e));
-              }
-            });
-          });
+        await Promise.allSettled(bots.map((bot) => {
+          const tweetData = data[0].status;
+          return retweet(bot, tweetData.id_str);
         })).then((values) => {
           // console.log(values);
           return callback(200, values);
@@ -337,15 +314,8 @@ async function executeFollowOrder(tweetOrder, callback) {
     return bot;
   }));
 
-  await Promise.allSettled(bots.map(async (bot) => {
-    return new Promise(async function(resolve, reject) {
-      try {
-        const ret = await follow(bot, handle);
-        return resolve(ret);
-      } catch (e) {
-        return reject(new Error(e));
-      }
-    });
+  await Promise.allSettled(bots.map((bot) => {
+    return follow(bot, handle);
   })).then((values) => {
     return callback(200, values);
   });
