@@ -129,7 +129,7 @@ async function tweet(bot, text) {
             return reject(new Error(err.message));
           }
 
-          return resolve(bot.id);
+          return resolve(bot.handle);
         });
   });
 }
@@ -173,7 +173,7 @@ async function retweet(bot, tweetId) {
             return reject(new Error(err.message));
           }
 
-          return resolve();
+          return resolve(bot.handle);
         });
   });
 }
@@ -195,7 +195,7 @@ async function follow(bot, handle) {
           if (err) {
             return reject(new Error(err.message));
           }
-          return resolve(bot.id);
+          return resolve(bot.handle);
         });
   });
 }
@@ -224,7 +224,9 @@ async function executeTweetOrder(tweetOrder, callback) {
       }
     });
   })).then((values) => {
-    return callback(200, values);
+    const performed = values.reduce((total, x) =>
+      (x.status === 'fulfilled' ? total + 1 : total), 0);
+    return callback(200, {performed: performed});
   });
 }
 
@@ -257,7 +259,9 @@ async function executeLikeOrder(likeOrder, callback) {
           const tweetData = data[0].status;
           return like(bot, tweetData.id_str);
         })).then((values) => {
-          return callback(200, values);
+          const performed = values.reduce((total, x) =>
+            (x.status === 'fulfilled' ? total + 1 : total), 0);
+          return callback(200, {performed: performed});
         });
       });
 }
@@ -293,8 +297,9 @@ async function executeRetweetOrder(retweetOrder, callback) {
           const tweetData = data[0].status;
           return retweet(bot, tweetData.id_str);
         })).then((values) => {
-          // console.log(values);
-          return callback(200, values);
+          const performed = values.reduce((total, x) =>
+            (x.status === 'fulfilled' ? total + 1 : total), 0);
+          return callback(200, {performed: performed});
         });
       });
 }
@@ -317,7 +322,10 @@ async function executeFollowOrder(tweetOrder, callback) {
   await Promise.allSettled(bots.map((bot) => {
     return follow(bot, handle);
   })).then((values) => {
-    return callback(200, values);
+    const performed = values.reduce((total, x) =>
+      (x.status === 'fulfilled' ? total + 1 : total), 0);
+
+    return callback(200, {performed: performed});
   });
 }
 

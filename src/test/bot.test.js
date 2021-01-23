@@ -37,6 +37,7 @@ test('executeFollowOrder', async (done) => {
 
   botService.executeFollowOrder(new FollowOrder(ids,
       'NFL'), function(code, msg) {
+    console.log(msg);
     expect(code).toBe(200);
     done();
   });
@@ -48,7 +49,6 @@ test('executeLikeOrder', async (done) => {
   botService.executeLikeOrder(new FollowOrder(ids,
       '@NFL'), function(code, msg) {
     expect(code).toBe(200);
-    console.log(msg);
     done();
   });
 });
