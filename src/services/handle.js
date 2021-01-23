@@ -28,8 +28,9 @@ function searchHandle(handle, callback) {
           name: data[0].name,
           followers_count: data[0].followers_count,
           profile_image_url: data[0].profile_image_url,
-          status: {id_str: data[0].status ? data[0].status.id_str :
-            undefined}});
+          status: data[0].status ?
+          {id_str: data[0].status.id_str, text:
+            data[0].status.text} : undefined});
       });
 }
 
