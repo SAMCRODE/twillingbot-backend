@@ -22,10 +22,12 @@ function searchHandle(handle, callback) {
               {code: err.statusCode === 404 ? 'NOTFOUNDHANDLE' :
       'SERVEROFF', msg: 'some error ocurred'});
         }
+        console.log(data[0]);
         return callback(200, {
           id_str: data[0].id_str,
           handle: handle,
           name: data[0].name,
+          description: data[0].description,
           followers_count: data[0].followers_count,
           profile_image_url: data[0].profile_image_url,
           status: data[0].status ?
