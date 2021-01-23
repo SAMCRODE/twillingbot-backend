@@ -29,10 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/handle', handleRouter);
 
 app.use(authenticate);
 
+app.use('/handle', handleRouter);
 app.use('/bots', botRouter);
 
 // catch 404 and forward to error handler
