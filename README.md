@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/SAMCRODE/backend.svg?branch=master)](https://travis-ci.com/SAMCRODE/backend) [![Maintainability](https://api.codeclimate.com/v1/badges/4aa3cd4c9409ba34db81/maintainability)](https://codeclimate.com/github/SAMCRODE/backend/maintainability) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/PS-ES-2020-1-TwitterBotDashboard/backend/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/SAMCRODE/twillingbot-backend.svg?branch=master)](https://travis-ci.com/SAMCRODE/twillingbot-backend) [![Maintainability](https://api.codeclimate.com/v1/badges/4aa3cd4c9409ba34db81/maintainability)](https://codeclimate.com/github/SAMCRODE/backend/maintainability) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/PS-ES-2020-1-TwitterBotDashboard/backend/blob/master/LICENSE)
 # Twitter Dash Backend :whale2:
 This is the backend for twitter dash app, it was builded with nodejs, and control bots on twitter using the [twitter API](https://developer.twitter.com/en/docs "twitter api") available the folowing functionalities:
 
