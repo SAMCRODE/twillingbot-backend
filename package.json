@@ -17,7 +17,7 @@
     "node-cache": "^5.1.2",
     "nodemailer": "^6.4.14",
     "pg": "^8.3.3",
-    "pug": "2.0.0-beta11",
+    "pug": "3.0.1",
     "twit": "^2.2.11"
   },
   "devDependencies": {
